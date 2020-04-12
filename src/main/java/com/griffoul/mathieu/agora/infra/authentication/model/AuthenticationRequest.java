@@ -1,4 +1,4 @@
-package com.griffoul.mathieu.agora.infra.authent.model;
+package com.griffoul.mathieu.agora.infra.authentication.model;
 
 import java.io.Serializable;
 

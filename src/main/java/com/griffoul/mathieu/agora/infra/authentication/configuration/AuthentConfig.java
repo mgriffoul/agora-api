@@ -1,9 +1,9 @@
-package com.griffoul.mathieu.agora.infra.authent.config;
+package com.griffoul.mathieu.agora.infra.authentication.configuration;
 
-import com.griffoul.mathieu.agora.infra.authent.entryPoint.AuthenticationEntryPoint;
-import com.griffoul.mathieu.agora.infra.authent.filter.AuthenticationFilter;
-import com.griffoul.mathieu.agora.infra.authent.service.AuthenticationTokenService;
-import com.griffoul.mathieu.agora.infra.authent.service.AuthenticationUserDetailsService;
+import com.griffoul.mathieu.agora.infra.authentication.entry.point.RejectedAuthenticationEntryPoint;
+import com.griffoul.mathieu.agora.infra.authentication.filter.AuthenticationFilter;
+import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationTokenService;
+import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +25,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthentConfig extends WebSecurityConfigurerAdapter {
-
 
     @Bean
     @Override
@@ -53,8 +52,8 @@ public class AuthentConfig extends WebSecurityConfigurerAdapter {
         return new AuthenticationFilter(jwtUserDetailsService(), jwtTokenService());
     }
     @Bean
-    public AuthenticationEntryPoint jwtAuthenticationEntryPoint(){
-        return new AuthenticationEntryPoint();
+    public RejectedAuthenticationEntryPoint jwtAuthenticationEntryPoint(){
+        return new RejectedAuthenticationEntryPoint();
     }
 
     @Override

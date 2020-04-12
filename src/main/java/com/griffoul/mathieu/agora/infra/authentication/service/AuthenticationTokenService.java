@@ -1,11 +1,10 @@
-package com.griffoul.mathieu.agora.infra.authent.service;
+package com.griffoul.mathieu.agora.infra.authentication.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -16,7 +15,7 @@ public class AuthenticationTokenService {
 
     private static final long serialVersionUID = -2550185165626007488L;
 
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 5L * 60L * 60L;
 
     @Value("${jwt.secret}")
     private String secret;

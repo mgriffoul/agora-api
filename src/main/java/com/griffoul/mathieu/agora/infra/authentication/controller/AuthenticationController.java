@@ -1,10 +1,10 @@
-package com.griffoul.mathieu.agora.infra.authent.controller;
+package com.griffoul.mathieu.agora.infra.authentication.controller;
 
-import com.griffoul.mathieu.agora.infra.authent.exception.AuthenticationException;
-import com.griffoul.mathieu.agora.infra.authent.model.AuthenticationRequest;
-import com.griffoul.mathieu.agora.infra.authent.model.AuthenticationResponse;
-import com.griffoul.mathieu.agora.infra.authent.service.AuthenticationTokenService;
-import com.griffoul.mathieu.agora.infra.authent.service.AuthenticationUserDetailsService;
+import com.griffoul.mathieu.agora.infra.authentication.exception.AuthenticationException;
+import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationRequest;
+import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationResponse;
+import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationTokenService;
+import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -33,7 +33,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
+    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
             authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         } catch (AuthenticationException e) {

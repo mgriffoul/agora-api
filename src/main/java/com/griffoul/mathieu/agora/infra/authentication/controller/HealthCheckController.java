@@ -1,4 +1,4 @@
-package com.griffoul.mathieu.agora.infra.authent.controller;
+package com.griffoul.mathieu.agora.infra.authentication.controller;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;

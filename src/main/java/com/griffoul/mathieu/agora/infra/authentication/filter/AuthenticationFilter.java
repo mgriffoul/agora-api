@@ -1,6 +1,6 @@
-package com.griffoul.mathieu.agora.infra.authent.filter;
+package com.griffoul.mathieu.agora.infra.authentication.filter;
 
-import com.griffoul.mathieu.agora.infra.authent.service.AuthenticationTokenService;
+import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationTokenService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,12 +1,13 @@
-package com.griffoul.mathieu.agora.infra.authent.entryPoint;
+package com.griffoul.mathieu.agora.infra.authentication.entry.point;
 
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AuthenticationEntryPoint implements org.springframework.security.web.AuthenticationEntryPoint {
+public class RejectedAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse response, AuthenticationException e) throws IOException {
