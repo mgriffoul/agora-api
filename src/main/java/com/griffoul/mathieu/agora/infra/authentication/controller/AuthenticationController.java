@@ -1,8 +1,9 @@
 package com.griffoul.mathieu.agora.infra.authentication.controller;
 
 import com.griffoul.mathieu.agora.infra.authentication.exception.AuthenticationException;
-import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationRequest;
-import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationResponse;
+import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationSignInRequest;
+import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationSignInResponse;
+import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationSignUpRequest;
 import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationTokenService;
 import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationUserDetailsService;
 import org.slf4j.Logger;
@@ -16,8 +17,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
-@RequestMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/authentication", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
 
     private Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
@@ -33,21 +36,36 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
+    public ResponseEntity<AuthenticationSignInResponse> createAuthenticationToken(@RequestBody AuthenticationSignInRequest authenticationSignInRequest) {
         try {
-            authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+            authenticate(authenticationSignInRequest.getUsername(), authenticationSignInRequest.getPassword());
         } catch (AuthenticationException e) {
             logger.error(e.getMessage(), e);
         }
         final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+                .loadUserByUsername(authenticationSignInRequest.getUsername());
         final String token = authenticationTokenService.generateToken(userDetails);
-        return ResponseEntity.ok(new AuthenticationResponse(token));
+        return ResponseEntity.ok(new AuthenticationSignInResponse(token));
     }
 
     private void authenticate(String username, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new AuthenticationException("USER_DISABLED", e);
+        } catch (BadCredentialsException e) {
+            throw new AuthenticationException("ERROR JWT INVALID_CREDENTIALS", e);
+        }
+    }
+
+    @PostMapping("/signup")
+    private void signUp(@Valid @RequestBody AuthenticationSignUpRequest authenticationSignUpRequest) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authenticationSignUpRequest.getUsername(),
+                            authenticationSignUpRequest.getPassword())
+            );
         } catch (DisabledException e) {
             throw new AuthenticationException("USER_DISABLED", e);
         } catch (BadCredentialsException e) {

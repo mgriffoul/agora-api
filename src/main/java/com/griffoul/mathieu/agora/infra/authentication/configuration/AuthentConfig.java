@@ -6,7 +6,6 @@ import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationTok
 import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -15,13 +14,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthentConfig extends WebSecurityConfigurerAdapter {
@@ -38,18 +35,13 @@ public class AuthentConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public AuthenticationUserDetailsService authenticationUserDetailsService(){
+        return new AuthenticationUserDetailsService();
     }
 
     @Bean
-    public AuthenticationUserDetailsService jwtUserDetailsService(){
-        return new AuthenticationUserDetailsService(passwordEncoder());
-    };
-
-    @Bean
-    public AuthenticationFilter authenticationFilter() throws Exception {
-        return new AuthenticationFilter(jwtUserDetailsService(), jwtTokenService());
+    public AuthenticationFilter authenticationFilter() {
+        return new AuthenticationFilter(authenticationUserDetailsService(), jwtTokenService());
     }
     @Bean
     public RejectedAuthenticationEntryPoint jwtAuthenticationEntryPoint(){
@@ -59,7 +51,10 @@ public class AuthentConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().configurationSource(corsConfigurationSource()).and().csrf().disable()
-                .authorizeRequests().antMatchers("/test/authenticate").permitAll()
+                .authorizeRequests()
+                .antMatchers(
+                        "/authentication/authenticate",
+                        "/authentication/signup").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -75,6 +70,6 @@ public class AuthentConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(jwtUserDetailsService()).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(authenticationUserDetailsService()).passwordEncoder(new BCryptPasswordEncoder());
     }
 }
