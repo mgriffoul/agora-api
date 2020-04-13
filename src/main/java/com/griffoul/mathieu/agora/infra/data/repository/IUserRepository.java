@@ -1,9 +1,9 @@
 package com.griffoul.mathieu.agora.infra.data.repository;
 
-import com.griffoul.mathieu.agora.infra.data.model.User;
+import com.griffoul.mathieu.agora.infra.data.model.AgoraUser;
 
 public interface IUserRepository {
 
-    User getUserByUsername(String username);
+    AgoraUser getUserByUsername(String username);
 
 }

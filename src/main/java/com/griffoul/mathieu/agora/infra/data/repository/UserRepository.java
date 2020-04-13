@@ -1,6 +1,6 @@
 package com.griffoul.mathieu.agora.infra.data.repository;
 
-import com.griffoul.mathieu.agora.infra.data.model.User;
+import com.griffoul.mathieu.agora.infra.data.model.AgoraUser;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -15,8 +15,8 @@ public class UserRepository implements IUserRepository{
     }
 
     @Override
-    public User getUserByUsername(String username) {
-        return entityManager.find(User.class, username);
+    public AgoraUser getUserByUsername(String username) {
+        return entityManager.find(AgoraUser.class, username);
     }
 
 }

@@ -9,11 +9,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "AG_USER")
-public class User {
+public class AgoraUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    private String id;
 
     @Column
     private String username;
@@ -24,11 +24,14 @@ public class User {
     @Column
     private String password;
 
-    public Long getId() {
+    @Column
+    private String seed;
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -54,5 +57,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSeed() {
+        return seed;
+    }
+
+    public void setSeed(String seed) {
+        this.seed = seed;
     }
 }
