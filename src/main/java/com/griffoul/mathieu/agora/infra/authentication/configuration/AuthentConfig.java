@@ -1,9 +1,6 @@
 package com.griffoul.mathieu.agora.infra.authentication.configuration;
 
-import com.griffoul.mathieu.agora.infra.authentication.entry.point.RejectedAuthenticationEntryPoint;
 import com.griffoul.mathieu.agora.infra.authentication.filter.AuthenticationFilter;
-import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationTokenService;
-import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +10,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -23,29 +22,23 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthentConfig extends WebSecurityConfigurerAdapter {
 
+    private AuthenticationEntryPoint rejectedAuthenticationEntryPoint;
+    private AuthenticationFilter authenticationFilter;
+    private UserDetailsService authenticationUserDetailsService;
+
+    @Autowired
+    public AuthentConfig(AuthenticationEntryPoint rejectedAuthenticationEntryPoint,
+                         AuthenticationFilter authenticationFilter,
+                         UserDetailsService authenticationUserDetailsService) {
+        this.rejectedAuthenticationEntryPoint = rejectedAuthenticationEntryPoint;
+        this.authenticationFilter = authenticationFilter;
+        this.authenticationUserDetailsService = authenticationUserDetailsService;
+    }
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }
-
-    @Bean
-    public AuthenticationTokenService jwtTokenService(){
-        return new AuthenticationTokenService();
-    }
-
-    @Bean
-    public AuthenticationUserDetailsService authenticationUserDetailsService(){
-        return new AuthenticationUserDetailsService();
-    }
-
-    @Bean
-    public AuthenticationFilter authenticationFilter() {
-        return new AuthenticationFilter(authenticationUserDetailsService(), jwtTokenService());
-    }
-    @Bean
-    public RejectedAuthenticationEntryPoint jwtAuthenticationEntryPoint(){
-        return new RejectedAuthenticationEntryPoint();
     }
 
     @Override
@@ -56,9 +49,9 @@ public class AuthentConfig extends WebSecurityConfigurerAdapter {
                         "/authentication/authenticate",
                         "/authentication/signup").permitAll()
                 .anyRequest().authenticated()
-                .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint())
+                .and().exceptionHandling().authenticationEntryPoint(rejectedAuthenticationEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        httpSecurity.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -70,6 +63,6 @@ public class AuthentConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(authenticationUserDetailsService()).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(authenticationUserDetailsService).passwordEncoder(new BCryptPasswordEncoder());
     }
 }

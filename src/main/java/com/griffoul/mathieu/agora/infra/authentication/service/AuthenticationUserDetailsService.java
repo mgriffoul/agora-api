@@ -1,30 +1,40 @@
 package com.griffoul.mathieu.agora.infra.authentication.service;
 
+import com.griffoul.mathieu.agora.infra.data.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class AuthenticationUserDetailsService implements UserDetailsService {
 
     private Map<String, String> authorizedCredentials = getCredentials();
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
+    private IUserRepository userRepository;
+
+    public AuthenticationUserDetailsService(IUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Value("${jwt.secret}")
     private static String fixSalt;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
+
+        userRepository.getUserByUsername(username);
+
+
         return null;
     }
 

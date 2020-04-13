@@ -1,7 +1,11 @@
 package com.griffoul.mathieu.agora.infra.data.model;
 
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "AG_USER")
@@ -12,7 +16,7 @@ public class User {
     private Long id;
 
     @Column
-    private String name;
+    private String username;
 
     @Column
     private String mail;
@@ -28,12 +32,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String name) {
+        this.username = name;
     }
 
     public String getMail() {
