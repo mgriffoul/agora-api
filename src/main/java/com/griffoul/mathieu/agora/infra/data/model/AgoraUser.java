@@ -6,14 +6,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import java.math.BigInteger;
 
 @Entity
-@Table(name = "AG_USER")
+@Table(name = "AgoraUser",
+        uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"username"}),
+                @UniqueConstraint(columnNames = {"mail"})
+        })
 public class AgoraUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
     @Column
     private String username;
@@ -27,11 +33,11 @@ public class AgoraUser {
     @Column
     private String seed;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -4,6 +4,7 @@ import com.griffoul.mathieu.agora.infra.authentication.exception.AuthenticationE
 import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationSignInRequest;
 import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationSignInResponse;
 import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationSignUpRequest;
+import com.griffoul.mathieu.agora.infra.authentication.service.AgoraUserService;
 import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationTokenService;
 import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationUserDetailsService;
 import org.slf4j.Logger;
@@ -29,15 +30,17 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
     private AuthenticationTokenService authenticationTokenService;
     private AuthenticationUserDetailsService userDetailsService;
+    private AgoraUserService agoraUserService;
 
     @Autowired
-    public AuthenticationController(AuthenticationManager authenticationManager, AuthenticationTokenService authenticationTokenService, AuthenticationUserDetailsService userDetailsService) {
+    public AuthenticationController(AuthenticationManager authenticationManager, AuthenticationTokenService authenticationTokenService, AuthenticationUserDetailsService userDetailsService, AgoraUserService agoraUserService) {
         this.authenticationManager = authenticationManager;
         this.authenticationTokenService = authenticationTokenService;
         this.userDetailsService = userDetailsService;
+        this.agoraUserService = agoraUserService;
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/signin")
     public ResponseEntity<AuthenticationSignInResponse> createAuthenticationToken(@RequestBody AuthenticationSignInRequest authenticationSignInRequest) {
         try {
             authenticate(authenticationSignInRequest.getUsername(), authenticationSignInRequest.getPassword());
@@ -63,11 +66,8 @@ public class AuthenticationController {
     @PostMapping("/signup")
     private void signUp(@Valid @RequestBody AuthenticationSignUpRequest authenticationSignUpRequest) {
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            authenticationSignUpRequest.getUsername(),
-                            authenticationSignUpRequest.getPassword())
-            );
+
+            agoraUserService.createUser(authenticationSignUpRequest);
         } catch (DisabledException e) {
             throw new AuthenticationException("USER_DISABLED", e);
         } catch (BadCredentialsException e) {

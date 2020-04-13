@@ -52,7 +52,7 @@ public class AuthentConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors().configurationSource(corsConfigurationSource()).and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(
-                        "/authentication/authenticate",
+                        "/authentication/signin",
                         "/authentication/signup").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(rejectedAuthenticationEntryPoint)

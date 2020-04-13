@@ -6,4 +6,6 @@ public interface IUserRepository {
 
     AgoraUser getUserByUsername(String username);
 
+    void createUser(AgoraUser agoraUser);
+
 }
