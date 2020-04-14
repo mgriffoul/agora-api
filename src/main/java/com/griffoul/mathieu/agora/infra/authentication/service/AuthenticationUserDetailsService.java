@@ -3,6 +3,7 @@ package com.griffoul.mathieu.agora.infra.authentication.service;
 import com.griffoul.mathieu.agora.infra.data.model.AgoraUser;
 import com.griffoul.mathieu.agora.infra.data.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,6 +25,7 @@ public class AuthenticationUserDetailsService implements UserDetailsService {
     }
 
     @Override
+    @Cacheable(value = "userCache")
     public UserDetails loadUserByUsername(final String username) {
         AgoraUser agoraUser = userRepository.getUserByUsername(username);
         if (nonNull(agoraUser)) {

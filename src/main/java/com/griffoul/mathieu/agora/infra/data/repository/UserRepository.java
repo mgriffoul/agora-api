@@ -1,14 +1,11 @@
 package com.griffoul.mathieu.agora.infra.data.repository;
 
-import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationSignUpRequest;
 import com.griffoul.mathieu.agora.infra.data.model.AgoraUser;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 public class UserRepository implements IUserRepository {

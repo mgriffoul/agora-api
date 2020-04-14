@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,12 +28,11 @@ public class AuthenticationProviderService implements AuthenticationProvider {
     }
 
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication) {
         String username = authentication.getPrincipal().toString();
-        String password = authentication.getCredentials().toString();
-        if (passwordMatching(authentication.getCredentials().toString(), username)) {
+        if (comparePasswords(authentication.getCredentials().toString(), username)) {
             return new UsernamePasswordAuthenticationToken(
-                    username, password, new ArrayList<>()
+                    username, authentication.getCredentials().toString(), new ArrayList<>()
             );
         } else {
             return null;
@@ -47,10 +44,10 @@ public class AuthenticationProviderService implements AuthenticationProvider {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 
-    private boolean passwordMatching(String password, String username) {
+    private boolean comparePasswords(String password, String username) {
         AgoraUser agoraUser = userRepository.getUserByUsername(username);
         return nonNull(agoraUser) && bCryptPasswordEncoder.matches(
-                agoraUser.getSeed() + password + authenticationProperties.getPasswordSeed(),
+                agoraUser.getSessionHash() + password + authenticationProperties.getPasswordSeed(),
                 agoraUser.getPassword());
     }
 

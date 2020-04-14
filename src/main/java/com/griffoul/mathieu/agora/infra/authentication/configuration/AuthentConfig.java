@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -25,19 +24,19 @@ public class AuthentConfig extends WebSecurityConfigurerAdapter {
 
     private AuthenticationEntryPoint rejectedAuthenticationEntryPoint;
     private AuthenticationFilter authenticationFilter;
-    private UserDetailsService authenticationUserDetailsService;
     private AuthenticationProviderService authenticationProviderService;
 
     @Autowired
-    public AuthentConfig(AuthenticationEntryPoint rejectedAuthenticationEntryPoint, AuthenticationFilter authenticationFilter, UserDetailsService authenticationUserDetailsService, AuthenticationProviderService authenticationProviderService) {
+    public AuthentConfig(AuthenticationEntryPoint rejectedAuthenticationEntryPoint,
+                         AuthenticationFilter authenticationFilter,
+                         AuthenticationProviderService authenticationProviderService) {
         this.rejectedAuthenticationEntryPoint = rejectedAuthenticationEntryPoint;
         this.authenticationFilter = authenticationFilter;
-        this.authenticationUserDetailsService = authenticationUserDetailsService;
         this.authenticationProviderService = authenticationProviderService;
     }
 
     @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+    public void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authenticationProviderService);
     }
 

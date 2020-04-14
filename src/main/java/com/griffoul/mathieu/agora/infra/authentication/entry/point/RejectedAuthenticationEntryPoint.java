@@ -12,7 +12,9 @@ import java.io.IOException;
 public class RejectedAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse response, AuthenticationException e) throws IOException {
+    public void commence(HttpServletRequest httpServletRequest,
+                         HttpServletResponse response,
+                         AuthenticationException e) throws IOException {
         response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized");
     }
 

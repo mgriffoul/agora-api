@@ -4,15 +4,15 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
-public class AuthenticationSignUpRequest implements Serializable {
+public class SignUpRequest implements Serializable {
 
     @NotEmpty(message = "Username must be provided")
     private String username;
 
-    @NotEmpty(message = "password must be provided")
+    @NotEmpty(message = "Password must be provided")
     private String password;
 
-    @Email(message = "provided mail is not conform")
+    @Email(message = "Provided mail is not conform")
     @NotEmpty(message = "Username must be provided")
     private String mail;
 

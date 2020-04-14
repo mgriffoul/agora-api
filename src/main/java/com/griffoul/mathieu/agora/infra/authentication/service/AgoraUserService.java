@@ -1,10 +1,13 @@
 package com.griffoul.mathieu.agora.infra.authentication.service;
 
-import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationSignUpRequest;
+import com.griffoul.mathieu.agora.infra.authentication.exception.AuthenticationException;
+import com.griffoul.mathieu.agora.infra.authentication.model.SignUpRequest;
+import com.griffoul.mathieu.agora.infra.authentication.model.SignedUpUser;
 import com.griffoul.mathieu.agora.infra.authentication.properties.AuthenticationProperties;
 import com.griffoul.mathieu.agora.infra.data.model.AgoraUser;
 import com.griffoul.mathieu.agora.infra.data.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +24,24 @@ public class AgoraUserService {
         this.authenticationProperties = authenticationProperties;
     }
 
-    public void createUser(final AuthenticationSignUpRequest authenticationSignUpRequest) {
+    public SignedUpUser createUser(final SignUpRequest signUpRequest) throws AuthenticationException {
         AgoraUser agoraUser = new AgoraUser();
-        agoraUser.setUsername(authenticationSignUpRequest.getUsername());
-        agoraUser.setMail(authenticationSignUpRequest.getMail());
+        agoraUser.setUsername(signUpRequest.getUsername());
+        agoraUser.setMail(signUpRequest.getMail());
         String seed = SeedService.getRandomSeed();
-        agoraUser.setSeed(seed);
-        agoraUser.setPassword(createPassword(seed, authenticationSignUpRequest.getPassword()));
-        userRepository.createUser(agoraUser);
+        agoraUser.setSessionHash(seed);
+        agoraUser.setPassword(createPassword(seed, signUpRequest.getPassword()));
+        try {
+            userRepository.createUser(agoraUser);
+        }catch (DataIntegrityViolationException e){
+            throw new AuthenticationException(e.getMessage(), e);
+        }
+        return mapToSignedUpUser(agoraUser);
+    }
+
+    private SignedUpUser mapToSignedUpUser(AgoraUser agoraUser) {
+        return new SignedUpUser().withMail(agoraUser.getMail())
+                .withUsername(agoraUser.getUsername());
     }
 
     private String createPassword(String seed, String rawPassword) {

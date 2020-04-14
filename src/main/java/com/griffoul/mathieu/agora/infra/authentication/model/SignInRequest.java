@@ -2,7 +2,7 @@ package com.griffoul.mathieu.agora.infra.authentication.model;
 
 import java.io.Serializable;
 
-public class AuthenticationSignInRequest implements Serializable {
+public class SignInRequest implements Serializable {
 
     private String username;
 

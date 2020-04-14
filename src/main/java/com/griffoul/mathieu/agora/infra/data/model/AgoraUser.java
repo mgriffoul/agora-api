@@ -7,13 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import java.math.BigInteger;
 
 @Entity
 @Table(name = "AgoraUser",
         uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"username"}),
-                @UniqueConstraint(columnNames = {"mail"})
+        @UniqueConstraint(name = "username_uk", columnNames = {"username"}),
+                @UniqueConstraint(name = "mail_pk",columnNames = {"mail"})
         })
 public class AgoraUser {
 
@@ -31,7 +30,7 @@ public class AgoraUser {
     private String password;
 
     @Column
-    private String seed;
+    private String sessionHash;
 
     public Integer getId() {
         return id;
@@ -65,11 +64,11 @@ public class AgoraUser {
         this.password = password;
     }
 
-    public String getSeed() {
-        return seed;
+    public String getSessionHash() {
+        return sessionHash;
     }
 
-    public void setSeed(String seed) {
-        this.seed = seed;
+    public void setSessionHash(String sessionHash) {
+        this.sessionHash = sessionHash;
     }
 }
