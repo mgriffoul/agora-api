@@ -1,6 +1,6 @@
 package com.griffoul.mathieu.agora.infra.authentication.model;
 
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -9,16 +9,16 @@ import java.io.Serializable;
 public class SignUpRequest implements Serializable {
 
     @NotEmpty(message = "Username must be provided")
-    @ApiParam(value = "username", required = true)
+    @ApiModelProperty(value = "Username of the user to create", required = true)
     private String username;
 
     @NotEmpty(message = "Password must be provided")
-    @ApiParam(value = "password", required = true)
+    @ApiModelProperty(value = "Password of the user to create", required = true)
     private String password;
 
     @Email(message = "Provided mail is not conform")
     @NotEmpty(message = "Username must be provided")
-    @ApiParam(value = "mail", required = true)
+    @ApiModelProperty(value = "Mail of the user to create", required = true)
     private String mail;
 
     public String getUsername() {

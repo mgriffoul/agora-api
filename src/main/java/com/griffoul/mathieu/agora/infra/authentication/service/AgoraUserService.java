@@ -12,6 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +23,18 @@ import org.springframework.stereotype.Service;
 public class AgoraUserService {
 
     private IUserRepository userRepository;
+    private AuthenticationManager authenticationManager;
     private AuthenticationProperties authenticationProperties;
     private Logger logger = LoggerFactory.getLogger(AgoraUserService.class);
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
-    public AgoraUserService(final IUserRepository userRepository, final AuthenticationProperties authenticationProperties) {
+    public AgoraUserService(final IUserRepository userRepository,
+                            final AuthenticationProperties authenticationProperties,
+                            final AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.authenticationProperties = authenticationProperties;
+        this.authenticationManager=authenticationManager;
     }
 
     public SignedUpUser createUser(final SignUpRequest signUpRequest)
@@ -47,6 +55,16 @@ public class AgoraUserService {
         }
         logger.info("User successfully created : {}", agoraUser.getUsername());
         return mapToSignedUpUser(agoraUser);
+    }
+
+    public void authenticate(String username, String password) throws AuthenticationException {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new AuthenticationException("User has been disabled");
+        } catch (BadCredentialsException e) {
+            throw new AuthenticationException("Invalid Token");
+        }
     }
 
     private void analyseException(DataIntegrityViolationException e) throws AuthenticationException {
