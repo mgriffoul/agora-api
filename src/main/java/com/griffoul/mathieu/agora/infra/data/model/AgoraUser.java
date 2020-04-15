@@ -11,24 +11,20 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "AgoraUser",
         uniqueConstraints = {
-        @UniqueConstraint(name = "username_uk", columnNames = {"username"}),
-                @UniqueConstraint(name = "mail_pk",columnNames = {"mail"})
+                @UniqueConstraint(name = "username_uk", columnNames = {"username"}),
+                @UniqueConstraint(name = "mail_pk", columnNames = {"mail"})
         })
-public class AgoraUser {
+public class AgoraUser implements Comparable<AgoraUser> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
     @Column
     private String username;
-
     @Column
     private String mail;
-
     @Column
     private String password;
-
     @Column
     private String sessionHash;
 
@@ -70,5 +66,15 @@ public class AgoraUser {
 
     public void setSessionHash(String sessionHash) {
         this.sessionHash = sessionHash;
+    }
+
+    @Override
+    public int compareTo(AgoraUser o) {
+        if (this.getUsername().equalsIgnoreCase(o.getUsername())
+                && this.getMail().equalsIgnoreCase(o.getMail())) {
+            return 1;
+        } else {
+            return 2;
+        }
     }
 }

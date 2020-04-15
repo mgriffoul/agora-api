@@ -44,11 +44,6 @@ public class AuthenticationTokenService {
         return Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token).getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
-    }
-
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return doGenerateToken(claims, userDetails.getUsername());
@@ -65,4 +60,8 @@ public class AuthenticationTokenService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
 }

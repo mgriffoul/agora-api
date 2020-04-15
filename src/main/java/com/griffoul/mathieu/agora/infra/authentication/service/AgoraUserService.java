@@ -5,7 +5,6 @@ import com.griffoul.mathieu.agora.infra.authentication.exception.BddTechnicalErr
 import com.griffoul.mathieu.agora.infra.authentication.model.SignUpErrorMessage;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignUpRequest;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignedUpUser;
-import com.griffoul.mathieu.agora.infra.authentication.properties.AuthenticationProperties;
 import com.griffoul.mathieu.agora.infra.data.model.AgoraUser;
 import com.griffoul.mathieu.agora.infra.data.repository.IUserRepository;
 import org.slf4j.Logger;
@@ -16,7 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,17 +22,16 @@ public class AgoraUserService {
 
     private IUserRepository userRepository;
     private AuthenticationManager authenticationManager;
-    private AuthenticationProperties authenticationProperties;
     private Logger logger = LoggerFactory.getLogger(AgoraUserService.class);
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    private PasswordService passwordService;
 
     @Autowired
     public AgoraUserService(final IUserRepository userRepository,
-                            final AuthenticationProperties authenticationProperties,
-                            final AuthenticationManager authenticationManager) {
+                            final AuthenticationManager authenticationManager,
+                            final PasswordService passwordService) {
         this.userRepository = userRepository;
-        this.authenticationProperties = authenticationProperties;
         this.authenticationManager=authenticationManager;
+        this.passwordService = passwordService;
     }
 
     public SignedUpUser createUser(final SignUpRequest signUpRequest)
@@ -42,9 +39,9 @@ public class AgoraUserService {
         AgoraUser agoraUser = new AgoraUser();
         agoraUser.setUsername(signUpRequest.getUsername());
         agoraUser.setMail(signUpRequest.getMail());
-        String seed = SeedService.getRandomSeed();
+        String seed = passwordService.getRandomSeed();
         agoraUser.setSessionHash(seed);
-        agoraUser.setPassword(createPassword(seed, signUpRequest.getPassword()));
+        agoraUser.setPassword(passwordService.createPassword(seed, signUpRequest.getPassword()));
         try {
             userRepository.createUser(agoraUser);
         } catch (DataIntegrityViolationException e) {
@@ -80,10 +77,6 @@ public class AgoraUserService {
     private SignedUpUser mapToSignedUpUser(AgoraUser agoraUser) {
         return new SignedUpUser().withMail(agoraUser.getMail())
                 .withUsername(agoraUser.getUsername());
-    }
-
-    private String createPassword(String seed, String rawPassword) {
-        return bCryptPasswordEncoder.encode(seed + rawPassword + authenticationProperties.getPasswordSeed());
     }
 
 }
