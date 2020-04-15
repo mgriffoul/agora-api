@@ -7,26 +7,20 @@ public class SignUpResponse implements Serializable {
 
     private SignedUpUser signedUpUser;
 
-    private SignUpMessage message;
+    private String jwtToken;
+
+    private String message;
 
     private List<String> erroneousField;
 
-    public enum SignUpMessage implements Serializable {
-        SUCCESS, MISSING_FIELD, FIELD_IN_ERROR, MAIL_UNAVAILABLE, USERNAME_UNAVAILABLE,
-    }
-
-    public SignUpResponse(SignUpMessage message) {
-        this.message = message;
-    }
-
-    public SignUpResponse(SignedUpUser signedUpUser, SignUpMessage message) {
+    public SignUpResponse(final SignedUpUser signedUpUser, final String jwtToken, final String message) {
         this.signedUpUser = signedUpUser;
+        this.jwtToken = jwtToken;
         this.message = message;
     }
 
-    public SignUpResponse(SignUpMessage message, List<String> erroneousField) {
+    public SignUpResponse(String message) {
         this.message = message;
-        this.erroneousField = erroneousField;
     }
 
     public SignedUpUser getSignedUpUser() {
@@ -37,11 +31,19 @@ public class SignUpResponse implements Serializable {
         this.signedUpUser = signedUpUser;
     }
 
-    public SignUpMessage getMessage() {
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(SignUpMessage message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 

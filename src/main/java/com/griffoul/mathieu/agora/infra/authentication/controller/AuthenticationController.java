@@ -1,6 +1,7 @@
 package com.griffoul.mathieu.agora.infra.authentication.controller;
 
 import com.griffoul.mathieu.agora.infra.authentication.exception.AuthenticationException;
+import com.griffoul.mathieu.agora.infra.authentication.exception.BddTechnicalErrorException;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignInRequest;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignInResponse;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignUpRequest;
@@ -26,8 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-
-import static java.util.Collections.singletonList;
 
 @RestController
 @RequestMapping(value = "/authentication", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -67,9 +66,9 @@ public class AuthenticationController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new AuthenticationException("USER_DISABLED", e);
+            throw new AuthenticationException("User has been disabled");
         } catch (BadCredentialsException e) {
-            throw new AuthenticationException("ERROR JWT INVALID_CREDENTIALS", e);
+            throw new AuthenticationException("Invalid Token");
         }
     }
 
@@ -79,11 +78,15 @@ public class AuthenticationController {
         try {
             signedUpUser = agoraUserService.createUser(signUpRequest);
         } catch (AuthenticationException e) {
-            SignUpResponse signUpResponse = new SignUpResponse(SignUpResponse.SignUpMessage.FIELD_IN_ERROR,
-                    singletonList(e.getMessage()));
+            SignUpResponse signUpResponse = new SignUpResponse(null, null, e.getMessage());
             return new ResponseEntity<>(signUpResponse, HttpStatus.BAD_REQUEST);
+        } catch (BddTechnicalErrorException e) {
+            SignUpResponse signUpResponse = new SignUpResponse(null, null, e.getMessage());
+            return new ResponseEntity<>(signUpResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(new SignUpResponse(signedUpUser, SignUpResponse.SignUpMessage.SUCCESS) {
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(signedUpUser.getUsername());
+        final String token = authenticationTokenService.generateToken(userDetails);
+        return new ResponseEntity<>(new SignUpResponse(signedUpUser, token, "SUCCESS") {
             }, HttpStatus.OK);
     }
 
