@@ -1,10 +1,14 @@
 package com.griffoul.mathieu.agora.infra.authentication.model;
 
+import io.swagger.annotations.ApiParam;
+
 import java.io.Serializable;
 
 public class SignedUpUser implements Serializable {
 
+    @ApiParam("username")
     private String username;
+    @ApiParam("mail")
     private String mail;
 
     public String getUsername() {

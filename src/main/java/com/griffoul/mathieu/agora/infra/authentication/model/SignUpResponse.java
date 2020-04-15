@@ -1,16 +1,22 @@
 package com.griffoul.mathieu.agora.infra.authentication.model;
 
+import io.swagger.annotations.ApiParam;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class SignUpResponse implements Serializable {
 
+    @ApiParam(value = "signedUpUser")
     private SignedUpUser signedUpUser;
 
+    @ApiParam(value = "jwtToken")
     private String jwtToken;
 
+    @ApiParam(value = "message")
     private String message;
 
+    @ApiParam(value = "erroneousField")
     private List<String> erroneousField;
 
     public SignUpResponse(final SignedUpUser signedUpUser, final String jwtToken, final String message) {
