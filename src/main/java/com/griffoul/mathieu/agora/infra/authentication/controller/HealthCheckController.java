@@ -15,6 +15,6 @@ import java.util.Optional;
 public class HealthCheckController {
     @GetMapping
     public HttpEntity<String> testController() {
-        return ResponseEntity.of(Optional.of("Bonjour "));
+        return ResponseEntity.of(Optional.of("{\"message\": \"Bonjour\"}"));
     }
 }
