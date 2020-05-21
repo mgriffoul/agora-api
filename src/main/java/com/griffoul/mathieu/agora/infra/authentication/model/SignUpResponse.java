@@ -8,7 +8,7 @@ import java.util.List;
 public class SignUpResponse implements Serializable {
 
     @ApiModelProperty("The created user summary")
-    private SignedUpUser signedUpUser;
+    private AuthenticationUser signedUpUser;
 
     @ApiModelProperty("The jwt authentication token returned by api when success")
     private String jwtToken;
@@ -19,7 +19,7 @@ public class SignUpResponse implements Serializable {
     @ApiModelProperty("List of fields in error in case of failure")
     private List<String> erroneousField;
 
-    public SignUpResponse(final SignedUpUser signedUpUser, final String jwtToken, final String message) {
+    public SignUpResponse(final AuthenticationUser signedUpUser, final String jwtToken, final String message) {
         this.signedUpUser = signedUpUser;
         this.jwtToken = jwtToken;
         this.message = message;
@@ -29,11 +29,11 @@ public class SignUpResponse implements Serializable {
         this.message = message;
     }
 
-    public SignedUpUser getSignedUpUser() {
+    public AuthenticationUser getSignedUpUser() {
         return signedUpUser;
     }
 
-    public void setSignedUpUser(SignedUpUser signedUpUser) {
+    public void setSignedUpUser(AuthenticationUser signedUpUser) {
         this.signedUpUser = signedUpUser;
     }
 

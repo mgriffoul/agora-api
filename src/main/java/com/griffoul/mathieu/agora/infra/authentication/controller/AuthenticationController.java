@@ -2,15 +2,16 @@ package com.griffoul.mathieu.agora.infra.authentication.controller;
 
 import com.griffoul.mathieu.agora.infra.authentication.exception.AuthenticationException;
 import com.griffoul.mathieu.agora.infra.authentication.exception.BddTechnicalErrorException;
+import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationUser;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignInRequest;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignInResponse;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignUpErrorMessage;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignUpRequest;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignUpResponse;
-import com.griffoul.mathieu.agora.infra.authentication.model.SignedUpUser;
 import com.griffoul.mathieu.agora.infra.authentication.service.AgoraUserService;
 import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationTokenService;
 import com.griffoul.mathieu.agora.infra.authentication.service.AuthenticationUserDetailsService;
+import com.griffoul.mathieu.agora.infra.data.model.AgoraUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -59,7 +60,7 @@ public class AuthenticationController {
     public ResponseEntity<SignInResponse> signIn(
             @RequestBody SignInRequest signInRequest) {
         try {
-            agoraUserService.authenticate(signInRequest.getUsername(), signInRequest.getPassword());
+            agoraUserService.authenticate(signInRequest.getMail(), signInRequest.getPassword());
         } catch (NoResultException e) {
             logger.error(e.getMessage(), e);
             SignInResponse signInResponse = new SignInResponse(null, SignUpErrorMessage.BAD_CREDENTIALS.name());
@@ -69,9 +70,16 @@ public class AuthenticationController {
             SignInResponse signInResponse = new SignInResponse(null, "TECHNICAL ERROR");
             return new ResponseEntity<>(signInResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(signInRequest.getUsername());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(signInRequest.getMail());
         final String token = authenticationTokenService.generateToken(userDetails);
-        return ResponseEntity.ok(new SignInResponse(token));
+
+        AuthenticationUser user = mapToAuthenticationUser(agoraUserService.getUserByMail(signInRequest.getMail()));
+
+        return ResponseEntity.ok(new SignInResponse(token).withAuthenticationUser(user).withMessage("SUCCESS"));
+    }
+
+    private AuthenticationUser mapToAuthenticationUser(AgoraUser agoraUser) {
+        return new AuthenticationUser().withMail(agoraUser.getMail()).withUsername(agoraUser.getUsername());
     }
 
     @PostMapping("/signup")
@@ -85,7 +93,7 @@ public class AuthenticationController {
     })
     public ResponseEntity<SignUpResponse> signUp(
             @ApiParam(required = true, name = "signUpRequest") @Valid @RequestBody SignUpRequest signUpRequest) {
-        SignedUpUser signedUpUser = null;
+        AuthenticationUser signedUpUser = null;
         try {
             signedUpUser = agoraUserService.createUser(signUpRequest);
         } catch (AuthenticationException e) {
@@ -95,7 +103,7 @@ public class AuthenticationController {
             SignUpResponse signUpResponse = new SignUpResponse(null, null, e.getMessage());
             return new ResponseEntity<>(signUpResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(signedUpUser.getUsername());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(signedUpUser.getMail());
         final String token = authenticationTokenService.generateToken(userDetails);
         return new ResponseEntity<>(new SignUpResponse(signedUpUser, token, "SUCCESS") {
         }, HttpStatus.OK);

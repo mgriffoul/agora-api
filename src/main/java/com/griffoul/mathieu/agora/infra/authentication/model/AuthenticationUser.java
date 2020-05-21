@@ -2,12 +2,11 @@ package com.griffoul.mathieu.agora.infra.authentication.model;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import java.io.Serializable;
-
-public class SignedUpUser implements Serializable {
+public class AuthenticationUser {
 
     @ApiModelProperty("Username of the created user")
     private String username;
+
     @ApiModelProperty("Mail of the created user")
     private String mail;
 
@@ -27,14 +26,13 @@ public class SignedUpUser implements Serializable {
         this.mail = mail;
     }
 
-    public SignedUpUser withMail(String mail) {
+    public AuthenticationUser withMail(String mail) {
         this.mail = mail;
         return this;
     }
 
-    public SignedUpUser withUsername(String username) {
+    public AuthenticationUser withUsername(String username) {
         this.username = username;
         return this;
     }
-
 }

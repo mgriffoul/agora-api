@@ -24,13 +24,13 @@ public class AuthenticationUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(final String username) {
-        AgoraUser agoraUser = userRepository.getUserByUsername(username);
+    public UserDetails loadUserByUsername(final String mail) {
+        AgoraUser agoraUser = userRepository.getUserByMail(mail);
         if (nonNull(agoraUser)) {
-            return new User(agoraUser.getUsername(), agoraUser.getPassword(),
+            return new User(agoraUser.getMail(), agoraUser.getPassword(),
                     new ArrayList<>());
         } else {
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            throw new UsernameNotFoundException("User not found with this mail: " + mail);
         }
     }
 

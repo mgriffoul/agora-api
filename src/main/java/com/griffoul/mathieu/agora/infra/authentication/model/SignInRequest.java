@@ -6,18 +6,18 @@ import java.io.Serializable;
 
 public class SignInRequest implements Serializable {
 
-    @ApiModelProperty(value = "Username of the user to sign in", required = true)
-    private String username;
+    @ApiModelProperty(value = "Mail of the user to sign in", required = true)
+    private String mail;
 
     @ApiModelProperty(value = "Password of the user to sign in", required = true)
     private String password;
 
-    public String getUsername() {
-        return username;
+    public String getMail() {
+        return mail;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getPassword() {

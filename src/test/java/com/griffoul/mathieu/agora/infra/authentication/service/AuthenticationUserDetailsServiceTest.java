@@ -29,15 +29,15 @@ class AuthenticationUserDetailsServiceTest {
         //Arrange
         AgoraUser agoraUser = new AgoraUser();
         agoraUser.setPassword("password");
-        agoraUser.setUsername("username");
+        agoraUser.setMail("mail");
 
-        Mockito.when(userRepository.getUserByUsername(any())).thenReturn(agoraUser);
+        Mockito.when(userRepository.getUserByMail(any())).thenReturn(agoraUser);
 
         //Act
-        UserDetails userDetails = authenticationUserDetailsService.loadUserByUsername("username");
+        UserDetails userDetails = authenticationUserDetailsService.loadUserByUsername("mail");
 
         //Assert
-        assertThat(userDetails.getUsername()).isEqualTo("username");
+        assertThat(userDetails.getUsername()).isEqualTo("mail");
         assertThat(userDetails.getPassword()).isEqualTo("password");
 
     }
@@ -45,11 +45,11 @@ class AuthenticationUserDetailsServiceTest {
     @Test
     void loadUserByUsername_should_throw_UsernameNotFoundException() {
         //Arrange
-        Mockito.when(userRepository.getUserByUsername(any())).thenReturn(null);
+        Mockito.when(userRepository.getUserByMail(any())).thenReturn(null);
 
         //Act
         assertThrows(UsernameNotFoundException.class, () -> {
-            authenticationUserDetailsService.loadUserByUsername("username");
+            authenticationUserDetailsService.loadUserByUsername("mail");
         });
         //Assert
     }

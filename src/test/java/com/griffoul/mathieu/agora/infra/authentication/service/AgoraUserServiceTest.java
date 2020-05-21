@@ -3,8 +3,9 @@ package com.griffoul.mathieu.agora.infra.authentication.service;
 
 import com.griffoul.mathieu.agora.infra.authentication.exception.AuthenticationException;
 import com.griffoul.mathieu.agora.infra.authentication.exception.BddTechnicalErrorException;
+import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationUser;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignUpRequest;
-import com.griffoul.mathieu.agora.infra.authentication.model.SignedUpUser;
+import com.griffoul.mathieu.agora.infra.data.model.AgoraUser;
 import com.griffoul.mathieu.agora.infra.data.repository.IUserRepository;
 import org.hibernate.HibernateException;
 import org.junit.jupiter.api.Assertions;
@@ -19,8 +20,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AgoraUserServiceTest {
@@ -44,7 +45,7 @@ class AgoraUserServiceTest {
         signUpRequest.setPassword("iloveJoker");
 
         //Act
-        SignedUpUser signedUpUser = agoraUserService.createUser(signUpRequest);
+        AuthenticationUser signedUpUser = agoraUserService.createUser(signUpRequest);
 
         //Assert
         verify(userRepository, Mockito.times(1)).createUser(any());
@@ -104,4 +105,21 @@ class AgoraUserServiceTest {
         assertThat(exception.getMessage()).isEqualTo("ERROR : database temporarily unavailable");
     }
 
+    @Test
+    void getUSerByMail_should_return_AgoraUser() {
+        // Arrange
+        AgoraUser agoraUser = new AgoraUser();
+        agoraUser.setMail("mail@mail.com");
+        agoraUser.setUsername("username");
+        String mail = "toto@gmail.com";
+        Mockito.when(userRepository.getUserByMail(anyString())).thenReturn(agoraUser);
+
+        // Act
+        AgoraUser agoraUserToTest = agoraUserService.getUserByMail(mail);
+
+        // Assert
+        assertThat(agoraUserToTest.getMail()).isEqualTo(agoraUser.getMail());
+        assertThat(agoraUserToTest.getUsername()).isEqualTo(agoraUser.getUsername());
+        Mockito.verify(userRepository, times(1)).getUserByMail("toto@gmail.com");
+    }
 }

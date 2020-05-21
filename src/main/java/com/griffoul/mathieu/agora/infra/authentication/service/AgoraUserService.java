@@ -2,9 +2,9 @@ package com.griffoul.mathieu.agora.infra.authentication.service;
 
 import com.griffoul.mathieu.agora.infra.authentication.exception.AuthenticationException;
 import com.griffoul.mathieu.agora.infra.authentication.exception.BddTechnicalErrorException;
+import com.griffoul.mathieu.agora.infra.authentication.model.AuthenticationUser;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignUpErrorMessage;
 import com.griffoul.mathieu.agora.infra.authentication.model.SignUpRequest;
-import com.griffoul.mathieu.agora.infra.authentication.model.SignedUpUser;
 import com.griffoul.mathieu.agora.infra.data.model.AgoraUser;
 import com.griffoul.mathieu.agora.infra.data.repository.IUserRepository;
 import org.slf4j.Logger;
@@ -20,21 +20,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class AgoraUserService {
 
-    private IUserRepository userRepository;
-    private AuthenticationManager authenticationManager;
-    private Logger logger = LoggerFactory.getLogger(AgoraUserService.class);
-    private PasswordService passwordService;
+    private final IUserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
+    private final Logger logger = LoggerFactory.getLogger(AgoraUserService.class);
+    private final PasswordService passwordService;
 
     @Autowired
     public AgoraUserService(final IUserRepository userRepository,
                             final AuthenticationManager authenticationManager,
                             final PasswordService passwordService) {
         this.userRepository = userRepository;
-        this.authenticationManager=authenticationManager;
+        this.authenticationManager = authenticationManager;
         this.passwordService = passwordService;
     }
 
-    public SignedUpUser createUser(final SignUpRequest signUpRequest)
+    public AgoraUser getUserByMail(final String mail) {
+        return userRepository.getUserByMail(mail);
+    }
+
+    public AuthenticationUser createUser(final SignUpRequest signUpRequest)
             throws AuthenticationException, BddTechnicalErrorException {
         AgoraUser agoraUser = new AgoraUser();
         agoraUser.setUsername(signUpRequest.getUsername());
@@ -74,8 +78,8 @@ public class AgoraUserService {
         }
     }
 
-    private SignedUpUser mapToSignedUpUser(AgoraUser agoraUser) {
-        return new SignedUpUser().withMail(agoraUser.getMail())
+    private AuthenticationUser mapToSignedUpUser(AgoraUser agoraUser) {
+        return new AuthenticationUser().withMail(agoraUser.getMail())
                 .withUsername(agoraUser.getUsername());
     }
 

@@ -16,15 +16,15 @@ public class UserRepository implements IUserRepository {
         this.entityManager = entityManager;
     }
 
-    private final static String GET_AGORA_USER_BY_USERNAME = "SELECT a FROM AgoraUser a WHERE a.username = :username";
+    private final static String GET_AGORA_USER_BY_MAIL = "SELECT a FROM AgoraUser a WHERE a.mail = :mail";
 
     @Override
     @Transactional
     @Cacheable(value = "userCache")
-    public AgoraUser getUserByUsername(final String username) {
+    public AgoraUser getUserByMail(final String mail) {
         return entityManager
-                .createQuery(GET_AGORA_USER_BY_USERNAME, AgoraUser.class)
-                .setParameter("username", username)
+                .createQuery(GET_AGORA_USER_BY_MAIL, AgoraUser.class)
+                .setParameter("mail", mail)
                 .getSingleResult();
     }
 

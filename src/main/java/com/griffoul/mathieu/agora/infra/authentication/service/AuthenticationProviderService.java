@@ -29,10 +29,10 @@ public class AuthenticationProviderService implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) {
-        String username = authentication.getPrincipal().toString();
-        if (comparePasswords(authentication.getCredentials().toString(), username)) {
+        String mail = authentication.getPrincipal().toString();
+        if (comparePasswords(authentication.getCredentials().toString(), mail)) {
             return new UsernamePasswordAuthenticationToken(
-                    username, authentication.getCredentials().toString(), new ArrayList<>()
+                    mail, authentication.getCredentials().toString(), new ArrayList<>()
             );
         } else {
             return null;
@@ -44,12 +44,15 @@ public class AuthenticationProviderService implements AuthenticationProvider {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 
-    private boolean comparePasswords(String password, String username) {
-        AgoraUser agoraUser = userRepository.getUserByUsername(username);
+    private boolean comparePasswords(String password, String mail) {
+        AgoraUser agoraUser = userRepository.getUserByMail(mail);
         return nonNull(agoraUser) && bCryptPasswordEncoder.matches(
                 agoraUser.getSessionHash() + password + authenticationProperties.getPasswordSeed(),
                 agoraUser.getPassword());
     }
 
+    public static void main(String[] args) {
+
+    }
 
 }
