@@ -1,11 +1,18 @@
-package com.griffoul.mathieu.agora.infra.user.model;
+package com.griffoul.mathieu.agora.domain.user.model;
 
-import java.io.Serializable;
+public class User {
 
-public class UserVue implements Serializable {
-
+    private Integer id;
     private String username;
     private String mail;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;

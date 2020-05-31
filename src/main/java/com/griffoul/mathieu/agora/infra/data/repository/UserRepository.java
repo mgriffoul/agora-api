@@ -34,4 +34,8 @@ public class UserRepository implements IUserRepository {
         entityManager.persist(agoraUser);
     }
 
+    @Override
+    public AgoraUser updateUser(AgoraUser agoraUser) {
+        return entityManager.merge(agoraUser);
+    }
 }

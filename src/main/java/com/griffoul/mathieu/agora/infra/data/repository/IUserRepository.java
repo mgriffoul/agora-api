@@ -1,5 +1,6 @@
 package com.griffoul.mathieu.agora.infra.data.repository;
 
+
 import com.griffoul.mathieu.agora.infra.data.model.AgoraUser;
 
 public interface IUserRepository {
@@ -8,4 +9,5 @@ public interface IUserRepository {
 
     void createUser(AgoraUser agoraUser);
 
+    AgoraUser updateUser(AgoraUser agoraUser);
 }
