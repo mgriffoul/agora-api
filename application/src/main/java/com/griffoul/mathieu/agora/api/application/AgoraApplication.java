@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication(scanBasePackages = "com.griffoul.mathieu.agora")
-@EntityScan("com.griffoul.mathieu.agora.api.infra.data.model")
+@EntityScan("com.griffoul.mathieu.agora.api.data.data.model")
 public class AgoraApplication {
 
     public static void main(String[] args) {

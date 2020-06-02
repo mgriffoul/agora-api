@@ -1,8 +1,8 @@
 package com.griffoul.mathieu.agora.api.authentication.service;
 
 import com.griffoul.mathieu.agora.api.authentication.properties.AuthenticationProperties;
-import com.griffoul.mathieu.agora.api.infra.data.model.AgoraUser;
-import com.griffoul.mathieu.agora.api.infra.data.repository.IUserRepository;
+import com.griffoul.mathieu.agora.api.data.data.model.AgoraUser;
+import com.griffoul.mathieu.agora.api.data.data.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

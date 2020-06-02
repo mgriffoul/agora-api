@@ -1,10 +1,10 @@
-package com.griffoul.mathieu.agora.api.infra.data.service;
+package com.griffoul.mathieu.agora.api.data.data.service;
 
 
 import com.griffoul.mathieu.agora.api.domain.model.User;
 import com.griffoul.mathieu.agora.api.domain.port.data.UserManagerAdapter;
-import com.griffoul.mathieu.agora.api.infra.data.model.AgoraUser;
-import com.griffoul.mathieu.agora.api.infra.data.repository.IUserRepository;
+import com.griffoul.mathieu.agora.api.data.data.model.AgoraUser;
+import com.griffoul.mathieu.agora.api.data.data.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

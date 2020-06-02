@@ -1,9 +1,9 @@
-package com.griffoul.mathieu.agora.api.infra.controller;
+package com.griffoul.mathieu.agora.api.services.controller;
 
 
 import com.griffoul.mathieu.agora.api.domain.model.User;
 import com.griffoul.mathieu.agora.api.domain.port.application.UserAdapter;
-import com.griffoul.mathieu.agora.api.infra.model.UserVue;
+import com.griffoul.mathieu.agora.api.services.model.UserVue;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

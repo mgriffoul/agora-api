@@ -11,7 +11,7 @@ import com.griffoul.mathieu.agora.api.authentication.model.SignUpResponse;
 import com.griffoul.mathieu.agora.api.authentication.service.AgoraUserService;
 import com.griffoul.mathieu.agora.api.authentication.service.AuthenticationTokenService;
 import com.griffoul.mathieu.agora.api.authentication.service.AuthenticationUserDetailsService;
-import com.griffoul.mathieu.agora.api.infra.data.model.AgoraUser;
+import com.griffoul.mathieu.agora.api.data.data.model.AgoraUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

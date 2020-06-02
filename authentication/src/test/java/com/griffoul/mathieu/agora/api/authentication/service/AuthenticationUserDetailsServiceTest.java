@@ -1,7 +1,7 @@
 package com.griffoul.mathieu.agora.api.authentication.service;
 
-import com.griffoul.mathieu.agora.api.infra.data.model.AgoraUser;
-import com.griffoul.mathieu.agora.api.infra.data.repository.IUserRepository;
+import com.griffoul.mathieu.agora.api.data.data.model.AgoraUser;
+import com.griffoul.mathieu.agora.api.data.data.repository.IUserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

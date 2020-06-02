@@ -1,4 +1,4 @@
-package com.griffoul.mathieu.agora.api.infra.model;
+package com.griffoul.mathieu.agora.api.services.model;
 
 import java.io.Serializable;
 

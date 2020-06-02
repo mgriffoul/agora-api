@@ -1,4 +1,4 @@
-package com.griffoul.mathieu.agora.api.infra.data.model;
+package com.griffoul.mathieu.agora.api.data.data.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

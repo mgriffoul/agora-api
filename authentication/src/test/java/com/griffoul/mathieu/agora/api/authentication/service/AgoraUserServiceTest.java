@@ -5,8 +5,8 @@ import com.griffoul.mathieu.agora.api.authentication.exception.AuthenticationExc
 import com.griffoul.mathieu.agora.api.authentication.exception.BddTechnicalErrorException;
 import com.griffoul.mathieu.agora.api.authentication.model.AuthenticationUser;
 import com.griffoul.mathieu.agora.api.authentication.model.SignUpRequest;
-import com.griffoul.mathieu.agora.api.infra.data.model.AgoraUser;
-import com.griffoul.mathieu.agora.api.infra.data.repository.IUserRepository;
+import com.griffoul.mathieu.agora.api.data.data.model.AgoraUser;
+import com.griffoul.mathieu.agora.api.data.data.repository.IUserRepository;
 import org.hibernate.HibernateException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

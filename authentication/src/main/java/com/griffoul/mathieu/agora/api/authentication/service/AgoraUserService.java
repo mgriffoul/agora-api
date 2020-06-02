@@ -5,8 +5,8 @@ import com.griffoul.mathieu.agora.api.authentication.exception.BddTechnicalError
 import com.griffoul.mathieu.agora.api.authentication.model.AuthenticationUser;
 import com.griffoul.mathieu.agora.api.authentication.model.SignUpErrorMessage;
 import com.griffoul.mathieu.agora.api.authentication.model.SignUpRequest;
-import com.griffoul.mathieu.agora.api.infra.data.model.AgoraUser;
-import com.griffoul.mathieu.agora.api.infra.data.repository.IUserRepository;
+import com.griffoul.mathieu.agora.api.data.data.model.AgoraUser;
+import com.griffoul.mathieu.agora.api.data.data.repository.IUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

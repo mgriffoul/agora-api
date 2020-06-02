@@ -1,6 +1,6 @@
-package com.griffoul.mathieu.agora.api.infra.data.repository;
+package com.griffoul.mathieu.agora.api.data.data.repository;
 
-import com.griffoul.mathieu.agora.api.infra.data.model.AgoraUser;
+import com.griffoul.mathieu.agora.api.data.data.model.AgoraUser;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
