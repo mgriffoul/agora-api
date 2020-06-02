@@ -21,7 +21,7 @@
 
     <properties>
         <jjwt.version>0.9.1</jjwt.version>
-        <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
+        <spring-boot.version>2.2.6.RELEASE</spring-boot.version>
         <guava.version>20.0</guava.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
@@ -34,6 +34,7 @@
         <mockito-jupiter.version>3.3.3</mockito-jupiter.version>
         <postgressql.version>42.2.12</postgressql.version>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
@@ -184,5 +185,24 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
