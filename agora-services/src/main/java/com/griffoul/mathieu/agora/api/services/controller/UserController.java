@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,8 +36,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Return jwtToken if credentials matching", response = String.class)
     })
-    public ResponseEntity<UserVue> signIn(@RequestHeader("Authorization") String token, Principal principal) {
-        System.out.println(token);
+    public ResponseEntity<UserVue> getUserByToken(final Principal principal) {
         User user = userService.getUserByMail(principal.getName());
         UserVue userVue = new UserVue();
         userVue.setMail(user.getMail());
@@ -51,13 +49,23 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Update a user and return it after update")
     })
-    public ResponseEntity<UserVue> update(@RequestBody UserVue userVue) {
+    public ResponseEntity<UserVue> update(@RequestBody final UserVue userVue) {
+        User updatedUser = userService.updateUser(mapToUser(userVue));
+        return ResponseEntity.ok(mapToUserVue(updatedUser));
+    }
+
+    private User mapToUser (final UserVue userVue) {
         User user = new User();
         user.setUsername(userVue.getUsername());
         user.setMail(userVue.getMail());
-        userService.updateUser(user);
-        return ResponseEntity.ok(userVue);
+        return user;
     }
 
+    private UserVue mapToUserVue(final User user) {
+        UserVue updatedUserVue = new UserVue();
+        updatedUserVue.setMail(user.getMail());
+        updatedUserVue.setUsername(user.getUsername());
+        return updatedUserVue;
+    }
 
 }

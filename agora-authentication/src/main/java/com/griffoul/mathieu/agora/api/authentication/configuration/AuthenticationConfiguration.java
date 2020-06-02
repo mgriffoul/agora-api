@@ -22,9 +22,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthenticationConfiguration extends WebSecurityConfigurerAdapter {
 
-    private AuthenticationEntryPoint rejectedAuthenticationEntryPoint;
-    private AuthenticationFilter authenticationFilter;
-    private AuthenticationProviderService authenticationProviderService;
+    private final AuthenticationEntryPoint rejectedAuthenticationEntryPoint;
+    private final AuthenticationFilter authenticationFilter;
+    private final AuthenticationProviderService authenticationProviderService;
 
     @Autowired
     public AuthenticationConfiguration(AuthenticationEntryPoint rejectedAuthenticationEntryPoint,

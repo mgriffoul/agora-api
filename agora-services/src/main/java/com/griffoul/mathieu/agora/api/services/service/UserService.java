@@ -21,8 +21,7 @@ public class UserService implements UserAdapter {
     }
 
     public User updateUser(User user) {
-        userManagerAdapter.updateUser(user);
-        return null;
+        return userManagerAdapter.updateUser(user);
     }
 
 }

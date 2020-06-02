@@ -1,10 +1,10 @@
 package com.griffoul.mathieu.agora.api.data.data.service;
 
 
-import com.griffoul.mathieu.agora.api.domain.model.User;
-import com.griffoul.mathieu.agora.api.domain.port.data.UserManagerAdapter;
 import com.griffoul.mathieu.agora.api.data.data.model.AgoraUser;
 import com.griffoul.mathieu.agora.api.data.data.repository.IUserRepository;
+import com.griffoul.mathieu.agora.api.domain.model.User;
+import com.griffoul.mathieu.agora.api.domain.port.data.UserManagerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +19,15 @@ public class CrudUserServiceManager implements UserManagerAdapter {
     }
 
     @Override
-    public User updateUser(User user) {
-        AgoraUser agoraUser = mapToAgoraUser(user);
-        AgoraUser updatedAgoraUser = userRepository.updateUser(agoraUser);
-        return mapToUser(updatedAgoraUser);
+    public User updateUser(final User user) {
+        AgoraUser oldAgoraUser = userRepository.getUserByMail(user.getMail());
+        AgoraUser newUserToUpdate = new AgoraUser();
+        newUserToUpdate.setMail(user.getMail());
+        newUserToUpdate.setUsername(user.getUsername());
+        newUserToUpdate.setId(userRepository.getUserByMail(user.getMail()).getId());
+        newUserToUpdate.setSessionHash(oldAgoraUser.getSessionHash());
+        newUserToUpdate.setPassword(oldAgoraUser.getPassword());
+        return mapToUser(userRepository.updateUser(newUserToUpdate));
     }
 
     @Override

@@ -35,6 +35,7 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
+    @Transactional
     public AgoraUser updateUser(AgoraUser agoraUser) {
         return entityManager.merge(agoraUser);
     }

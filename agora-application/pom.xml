@@ -25,8 +25,16 @@
             <artifactId>authentication</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.griffoul.mathieu.data</groupId>
+            <artifactId>data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.griffoul.mathieu.api-services</groupId>
+            <artifactId>api-services</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
-
-
 
 </project>
