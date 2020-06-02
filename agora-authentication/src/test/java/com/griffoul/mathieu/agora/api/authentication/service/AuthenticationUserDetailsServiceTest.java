@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -48,7 +47,7 @@ class AuthenticationUserDetailsServiceTest {
         Mockito.when(userRepository.getUserByMail(any())).thenReturn(null);
 
         //Act
-        assertThrows(UsernameNotFoundException.class, () -> {
+        assertThrows(NoClassDefFoundError.class, () -> {
             authenticationUserDetailsService.loadUserByUsername("mail");
         });
         //Assert
