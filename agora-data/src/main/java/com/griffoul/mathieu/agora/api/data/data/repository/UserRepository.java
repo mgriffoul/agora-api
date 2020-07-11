@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 @Service
 public class UserRepository implements IUserRepository {
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public UserRepository(EntityManager entityManager) {
         this.entityManager = entityManager;

@@ -15,7 +15,7 @@ public class RejectedAuthenticationEntryPoint implements AuthenticationEntryPoin
     public void commence(HttpServletRequest httpServletRequest,
                          HttpServletResponse response,
                          AuthenticationException e) throws IOException {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "BAD CREDENTIALS");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "BAD_CREDENTIALS");
     }
 
 }

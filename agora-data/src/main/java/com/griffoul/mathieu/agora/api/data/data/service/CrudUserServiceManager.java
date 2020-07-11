@@ -19,27 +19,20 @@ public class CrudUserServiceManager implements UserManagerAdapter {
     }
 
     @Override
-    public User updateUser(final User user) {
-        AgoraUser oldAgoraUser = userRepository.getUserByMail(user.getMail());
-        AgoraUser newUserToUpdate = new AgoraUser();
-        newUserToUpdate.setMail(user.getMail());
-        newUserToUpdate.setUsername(user.getUsername());
-        newUserToUpdate.setId(userRepository.getUserByMail(user.getMail()).getId());
-        newUserToUpdate.setSessionHash(oldAgoraUser.getSessionHash());
-        newUserToUpdate.setPassword(oldAgoraUser.getPassword());
-        return mapToUser(userRepository.updateUser(newUserToUpdate));
+    public User updateUser(final User userToUpdate) {
+        AgoraUser oldAgoraUser = userRepository.getUserByMail(userToUpdate.getMail());
+        AgoraUser newAgoraUser = new AgoraUser();
+        newAgoraUser.setMail(userToUpdate.getMail());
+        newAgoraUser.setUsername(userToUpdate.getUsername());
+        newAgoraUser.setId(oldAgoraUser.getId());
+        newAgoraUser.setSessionHash(oldAgoraUser.getSessionHash());
+        newAgoraUser.setPassword(oldAgoraUser.getPassword());
+        return mapToUser(userRepository.updateUser(newAgoraUser));
     }
 
     @Override
     public User getUserByMail(String mail) {
         return mapToUser(userRepository.getUserByMail(mail));
-    }
-
-    private AgoraUser mapToAgoraUser (User user) {
-        AgoraUser agoraUser = new AgoraUser();
-        agoraUser.setMail(user.getMail());
-        agoraUser.setUsername(user.getUsername());
-        return agoraUser;
     }
 
     private User mapToUser (AgoraUser agoraUser){
